@@ -19,6 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / 'src'
 SITE = 'https://completesourcing.com'
+GA_ID = 'G-7SWHH580PL'  # GA4 property 558205854 (james@ecomstrat.com)
 BRAND = 'Complete Sourcing'
 EMAIL = 'hello@completesourcing.com'
 
@@ -136,6 +137,10 @@ def page(meta, body, schema, crumbs, canonical, noindex=False, og_type='website'
     return f'''<!doctype html>
 <html lang="en">
   <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','{GA_ID}');
+    document.addEventListener('submit',function(e){{if(e.target&&e.target.getAttribute('name')==='sourcing-inquiry'){{try{{sessionStorage.setItem('cs_lead',location.pathname);}}catch(x){{}}}}}},true);
+    {"try{var src=sessionStorage.getItem('cs_lead');if(src){sessionStorage.removeItem('cs_lead');gtag('event','generate_lead',{form_name:'sourcing-inquiry',lead_source:src});}}catch(x){}" if canonical.endswith('/thanks/') else ''}</script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{esc(title)}</title>
